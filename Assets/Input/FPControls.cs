@@ -44,6 +44,15 @@ public partial class @FPControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""bce78e60-59a6-4fc0-a3bf-4a9fb67a7083"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -167,6 +176,17 @@ public partial class @FPControls : IInputActionCollection2, IDisposable
                     ""action"": ""PlayerMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cd0202e8-8ab4-4b3b-88ca-b428a7889f68"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -194,6 +214,7 @@ public partial class @FPControls : IInputActionCollection2, IDisposable
         m_GameplayControls = asset.FindActionMap("Gameplay Controls", throwIfNotFound: true);
         m_GameplayControls_CameraLook = m_GameplayControls.FindAction("CameraLook", throwIfNotFound: true);
         m_GameplayControls_PlayerMove = m_GameplayControls.FindAction("PlayerMove", throwIfNotFound: true);
+        m_GameplayControls_Interact = m_GameplayControls.FindAction("Interact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -255,12 +276,14 @@ public partial class @FPControls : IInputActionCollection2, IDisposable
     private IGameplayControlsActions m_GameplayControlsActionsCallbackInterface;
     private readonly InputAction m_GameplayControls_CameraLook;
     private readonly InputAction m_GameplayControls_PlayerMove;
+    private readonly InputAction m_GameplayControls_Interact;
     public struct GameplayControlsActions
     {
         private @FPControls m_Wrapper;
         public GameplayControlsActions(@FPControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @CameraLook => m_Wrapper.m_GameplayControls_CameraLook;
         public InputAction @PlayerMove => m_Wrapper.m_GameplayControls_PlayerMove;
+        public InputAction @Interact => m_Wrapper.m_GameplayControls_Interact;
         public InputActionMap Get() { return m_Wrapper.m_GameplayControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -276,6 +299,9 @@ public partial class @FPControls : IInputActionCollection2, IDisposable
                 @PlayerMove.started -= m_Wrapper.m_GameplayControlsActionsCallbackInterface.OnPlayerMove;
                 @PlayerMove.performed -= m_Wrapper.m_GameplayControlsActionsCallbackInterface.OnPlayerMove;
                 @PlayerMove.canceled -= m_Wrapper.m_GameplayControlsActionsCallbackInterface.OnPlayerMove;
+                @Interact.started -= m_Wrapper.m_GameplayControlsActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_GameplayControlsActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_GameplayControlsActionsCallbackInterface.OnInteract;
             }
             m_Wrapper.m_GameplayControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -286,6 +312,9 @@ public partial class @FPControls : IInputActionCollection2, IDisposable
                 @PlayerMove.started += instance.OnPlayerMove;
                 @PlayerMove.performed += instance.OnPlayerMove;
                 @PlayerMove.canceled += instance.OnPlayerMove;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
             }
         }
     }
@@ -303,5 +332,6 @@ public partial class @FPControls : IInputActionCollection2, IDisposable
     {
         void OnCameraLook(InputAction.CallbackContext context);
         void OnPlayerMove(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
 }
