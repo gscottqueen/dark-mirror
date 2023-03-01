@@ -6,6 +6,7 @@ public class OrbColiderDetection : MonoBehaviour
 {
     private Color platformButtonColor;
     private Color orbColor;
+    private Component[] orbPrimatives;
     private void Start()
     {
         platformButtonColor = gameObject.GetComponent<MeshRenderer>().material.color;
@@ -13,9 +14,19 @@ public class OrbColiderDetection : MonoBehaviour
     // OnTriggerEnter is called when the Collider other enters the trigger
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("enter");
         if (other.CompareTag("Orb"))
         {
-            orbColor = other.GetComponent<MeshRenderer>().material.color;
+
+            orbPrimatives = other.GetComponentsInChildren<MeshRenderer>();
+
+            foreach (MeshRenderer mr in orbPrimatives)
+            {
+                if(mr.CompareTag("OrbChild"))
+                {
+                    orbColor = mr.material.color;
+                }
+            }
 
             if (platformButtonColor.Equals(orbColor))
             {
@@ -32,7 +43,7 @@ public class OrbColiderDetection : MonoBehaviour
     {
         if (other.CompareTag("Orb"))
         {
-            gameObject.BroadcastMessage("EnergyPlumeoff", platformButtonColor);
+            gameObject.BroadcastMessage("EnergyPlumeOff", platformButtonColor);
             Debug.Log("PlatformButton Collision");
         }
 

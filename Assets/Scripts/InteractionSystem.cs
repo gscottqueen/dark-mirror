@@ -10,6 +10,8 @@ public class InteractionSystem : MonoBehaviour
 
     public GameObject pickupSlot;
 
+    public GameObject interactParent;
+
     public float interactDistance;
 
     public bool holding;
@@ -47,7 +49,7 @@ public class InteractionSystem : MonoBehaviour
         if (holding)
         {
             // Drop what we're holding
-            focusedObject.transform.parent = null;
+            focusedObject.transform.parent = interactParent.transform;
             focusedObject.GetComponent<Rigidbody>().isKinematic = false;
             holding = false;
         }
